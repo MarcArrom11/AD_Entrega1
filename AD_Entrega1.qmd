@@ -6,7 +6,7 @@ editor: visual
 
 ## 
 
-## librerias
+## Librerias
 
 ```{r}
 library(tidyverse) 
@@ -16,11 +16,11 @@ library(readxl)
 library(readr)
 ```
 
-#### Cargar datos
+## Carga de los datos
 
 Cargamos los datos y observamos si se han cargado bien.
 
-```{r}
+```{r, echo=FALSE,}
  #### Cargar datos
 Arkansas <- read_excel("Input/Arkansas.xlsx")
 
@@ -35,31 +35,33 @@ Arkansas$ASPC = as.numeric(Arkansas$ASPC)
 Arkansas$BMPC = as.numeric(Arkansas$BMPC)
 ```
 
+## Contexto y variables.
+
 Este dataset está formado por 565 observaciones pertenecientes a pacientes con Mieloma Múltiple (un tipo de cancer que se origina en la médula ósea). Cada obersvación cuenta con 23 variables, hagamos un pequeño repaso de estas y para aquellas variables cínicas, analicemos cuáles deberían ser los valores para una persona sana. Los datos han sido extraidos del portal MayoClínic.
 
 -   PATID. Nos indica la identifación del paciente.
 
--   PROT. Nos indica el tratamiento que se le aplicó al paciente, TT2 o TT3
+-   PROT. Nos indica el tratamiento que se le aplicó al paciente, TT2 o TT3.
 
 -   AGE. Nos indica la edad del paciente expresada en años.
 
--   SEX. Nos indica el sexo del paciente, "male" o "female"
+-   SEX. Nos indica el sexo del paciente, "male" o "female".
 
--   RACE. Nos indica la raza del paciente, "white" o "other"
+-   RACE. Nos indica la raza del paciente, "white" o "other".
 
--   ISOTYPE. El isotipo del paciente, "IgA", "IgG", "IgM" o "IgE"
+-   ISOTYPE. El isotipo del paciente, "IgA", "IgG", "IgM" o "IgE".
 
--   B2M. Nos indica la Microglobulina beta-2, expresada en mg/l
+-   B2M. Nos indica la Microglobulina beta-2, expresada en mg/l.La beta-2 microglobulina es una proteína que indica la función renal y el estado del sistema inmunológico. En el mieloma múltiple, sus niveles aumentan debido a la proliferación de células malignas y daño renal. Los niveles normales son inferiores a 2.5 mg/L (fuente: Mayo Clinic)
 
--   CRP. Nos indica la Proteina C-Reactiva, expresada en mg/l
+-   CRP. La Proteína C-Reactiva es un marcador de inflamación producido en el hígado, cuyo nivel en sangre aumenta en respuesta a la inflamación. En el mieloma múltiple, puede elevarse debido a la inflamación y a las infecciones recurrentes, ya que los pacientes tienen un sistema inmunológico comprometido.
 
 -   CREAT. Nos indica la creatinina, expresada en mg/dl. Según MayoClínic, el rango normal para personas adulto s es entre 0,74 y 1,35m mg/dl para los hombres y entre 0,59 y 1,04 mg/dl.
 
--   LDH. Nos indica el Lactato Deshidrogenasa, expresada en U/l (unidades por litro.
+-   LDH. Nos indica el Lactato Deshidrogenasa, expresado en U/l. La lactato deshidrogenasa es una enzima liberada en la sangre cuando hay daño celular. En el mieloma múltiple, sus niveles elevados indican mayor recambio celular y pueden reflejar una carga tumoral elevada o una enfermedad más agresiva. Los niveles normales en hombres de LDH se encuentran entre 122 a 222 U/L. (Mayo Clinic) <!--# https://www.mayoclinic.org/es/tests-procedures/liver-function-tests/about/pac-20394595#:~:text=La%20L%2Dlactato%20deshidrogenasa%20es,Tiempo%20de%20protrombina. -->
 
--   ALB. Nos indica la Albúmina, expresada en g/l
+-   ALB. Nos indica la Albúmina, expresada en g/l. Nos indica la Albúmina, expresada en g/l. La albúmina es una proteína del hígado que regula el equilibrio de líquidos y transporta sustancias en el cuerpo. En el mieloma múltiple, sus niveles pueden reducirse por inflamación crónica, daño renal o mala nutrición. Los niveles normales de albúmina en adultos suelen estar entre 3.5 y 5.0 g/dL (Mayo Clinic).
 
--   HGB. Nos indica la Hemoglobinal, expresada en g/dl
+-   HGB. Nos indica la Hemoglobina, expresada en g/dl. Nos indica la Hemoglobina, expresada en g/dl. La hemoglobina es una proteína en los glóbulos rojos que transporta oxígeno a los tejidos. En el mieloma múltiple, los pacientes suelen tener anemia debido a que las células cancerosas en la médula ósea desplazan a las que producen glóbulos rojos, lo que reduce su producción y causa síntomas como fatiga y debilidad. Los niveles normales de hemoglobina se encuentran entre 13,2 a 16,6 g/dL para los hombres y 11,6 a 15 g/dL para las mujeres.
 
 -   ASPC. Nos indica las Células plasmáticas en aspirado de médula ósea, se expresa como un porcentaje de las células malignas.
 
@@ -67,15 +69,25 @@ Este dataset está formado por 565 observaciones pertenecientes a pacientes con 
 
 -   MRI. Nos indica el número de lesiones focales definidas por resonancia magnéticaIndica el número de lesiones focales visibles en una resonancia magnética, que suelen estar presentes en huesos como el cráneo, la columna y la pelvis.
 
-**OTRAS**
+-   CPS1. Se trata de un parámetro clínico.
 
+-   CPR1. Se trata de un parámetro clínico.
 
+-   EFS_Censor. "Event-free survival censor" indica si un paciente ha sufrido recaída o progresión del mieloma múltiple. Si no ha ocurrido, el paciente se considera "censurado," lo que significa que sigue sin complicaciones y en observación.
 
+-   EFS_Time. "Event-free survival time" representa el tiempo de supervivencia libre de eventos (en meses), medido desde la fecha de registro hasta la muerte, progresión de la enfermedad o recaída, o censurado en la última fecha de contacto.
+
+-   OS_Censor. Indica el estado de fallecimiento del paciente. Se marca como "1" si el paciente ha fallecido y "0" si no ha ocurrido la muerte, en cuyo caso el paciente se considera censurado en el estudio.
+
+-   OS_Time. Indica el tiempo de supervivencia global en meses, calculado desde la fecha de registro hasta la fecha de muerte o censurado en la última fecha de contacto si no ha ocurrido el fallecimiento.
+
+-   Cyto_Abn. Indica la presencia de anomalías citogenéticas. Se marca como "1" si se detectaron anomalías y "0" si no se detectaron o estaban ausentes.
+
+# Visualización y análisis de los datos
+
+Ahora se mostrarán los datos hemoglobina separados por sexo en un gráfico. En este se muestra un rango, de color verde, que indica el intervalo en que los niveles de hemoglobia se consideran normales.
 
 ```{r}
-library(ggplot2)
-library(dplyr)
-
 # Filtrar los datos para hombres y mujeres
 datos_filtrados <- Arkansas %>% 
   filter(SEX %in% c("male", "female")) %>%  # Filtrar solo para hombres y mujeres
@@ -84,8 +96,8 @@ datos_filtrados <- Arkansas %>%
 # Definir el rango saludable específico para cada sexo
 rango_sano <- tibble(
   SEX = c("male", "female"),
-  rango_sano_min = c(0.74, 0.59),  # Rango mínimo para hombres y mujeres
-  rango_sano_max = c(1.35, 1.04)   # Rango máximo para hombres y mujeres
+  rango_sano_min = c(13.2, 11.6),  # Rango mínimo para hombres y mujeres
+  rango_sano_max = c(16.6, 15)   # Rango máximo para hombres y mujeres
 )
 
 # Unir los rangos saludables con los datos filtrados
@@ -93,7 +105,7 @@ datos_filtrados <- datos_filtrados %>%
   left_join(rango_sano, by = "SEX")
 
 # Crear el gráfico con facetado por 'SEX'
-ggplot(datos_filtrados, aes(x = Persona, y = CREAT, color = SEX)) +
+ggplot(datos_filtrados, aes(x = Persona, y = HGB, color = SEX)) +
   # Rango saludable sombreado para cada sexo
   geom_rect(aes(xmin = min(Persona) - 0.5, xmax = max(Persona) + 0.5, 
                 ymin = rango_sano_min, ymax = rango_sano_max),
@@ -104,8 +116,8 @@ ggplot(datos_filtrados, aes(x = Persona, y = CREAT, color = SEX)) +
   geom_hline(aes(yintercept = rango_sano_min), color = "red", size = 0.5) +  # Línea continua inferior del rango sano
   geom_hline(aes(yintercept = rango_sano_max), color = "red", size = 0.5) +  # Línea continua superior del rango sano
   # Títulos y etiquetas
-  labs(title = "Valores de Creatinina por Sexo", 
-       x = NULL, y = "Nivel de Creatinina (mg/dL)", 
+  labs(title = "Valores de Hemoglobina por Sexo", 
+       x = NULL, y = "Nivel de Hemoglobina (mg/dL)", 
        color = "Sexo") +
   # Facetado por sexo
   facet_grid(~SEX) +  
@@ -122,16 +134,65 @@ ggplot(datos_filtrados, aes(x = Persona, y = CREAT, color = SEX)) +
     legend.position = "right"  # Posicionar la leyenda en la parte inferior
   ) +
   scale_color_manual(values = c("male" = "blue", "female" = "black"),
-                     labels = c("male" = "Hombre", "female" = "Mujer")) +  # Colores y etiquetas personalizadas para la leyenda
-  # Añadir anotaciones específicas en cada gráfico
-  geom_text(data = filter(datos_filtrados, SEX == "male"), 
-            aes(x = Inf, y = Inf, label = paste("Rango saludable: ", 
-                                                "0.74 - 1.35")), 
-            hjust = 1.1, vjust = 1.1, size = 3.5, color = "black") +
-  geom_text(data = filter(datos_filtrados, SEX == "female"), 
-            aes(x = Inf, y = Inf, label = paste("Rango saludable: ", 
-                                                "0.65 - 1.25")), 
-            hjust = 1.1, vjust = 1.1, size = 3.5, color = "black")
+                     labels = c("male" = "Hombre", "female" = "Mujer"))  # Colores y etiquetas personalizadas para la leyenda
+```
+
+Observamos que, en ambos sexos, hay una gran cantidad de individuos por debajo de los niveles normales. Aquí se muestra una tabla con los valors filtrados.
+
+```{r, echo = FALSE}
+library(dplyr)
+
+# Definir el rango saludable específico para cada sexo
+rango_sano <- tibble(
+  SEX = c("male", "female"),
+  rango_sano_min = c(13.2, 11.6),  # Rango mínimo para hombres y mujeres
+  rango_sano_max = c(16.6, 15)   # Rango máximo para hombres y mujeres
+)
+
+# Unir los rangos saludables con los datos filtrados
+datos_filtrados <- Arkansas %>% 
+  filter(SEX %in% c("male", "female")) %>%  # Filtrar solo para hombres y mujeres
+  left_join(rango_sano, by = "SEX")  # Unir los rangos saludables con los datos
+
+# Calcular la cantidad de personas por debajo o por encima del rango saludable
+resultado <- datos_filtrados %>%
+  mutate(
+    estado = case_when(
+      HGB < rango_sano_min ~ "Por debajo del rango normal",
+      HGB > rango_sano_max ~ "Por encima del rango normal",
+      TRUE ~ "Dentro del rango normal"
+    )
+  ) %>%
+  group_by(SEX, estado) %>%
+  summarise(cantidad = n(), .groups = 'drop')  # Contar la cantidad de personas en cada estado
+
+# Calcular el total de personas por sexo
+totales <- datos_filtrados %>%
+  group_by(SEX) %>%
+  summarise(total = n(), .groups = 'drop')
+
+# Unir los totales con el resultado y calcular las proporciones
+resultado_final <- resultado %>%
+  left_join(totales, by = "SEX") %>%
+  mutate(
+    porcentaje = round((cantidad / total) * 100, digits = 2)  # Calcular el porcentaje
+  )
+
+# Mostrar el resultado final
+print(resultado_final)
+
+suma_females <- resultado_final %>%
+  filter(SEX == "female", estado != "Dentro del rango normal") %>%
+  summarise(total = sum(cantidad)) %>%
+  pull(total)
+
+suma_males <- resultado_final %>%
+  filter(SEX == "male", estado != "Dentro del rango normal") %>%
+  summarise(total = sum(cantidad)) %>%
+  pull(total)
 
 ```
 
+## Conclusiones
+
+Observando la proporción de personas que no se encuentran en los valores normales, tenemos que el 65.9% de las mujeres y el 80.5% de los hombres están fuera del rango normal. Esto nos podría indicar que los individuos con Mieloma Múltiple tienen tendencia a tener los niveles de homoglobina alterados, en su mayoria, por debajo de los normal.
