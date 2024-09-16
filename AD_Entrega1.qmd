@@ -16,17 +16,7 @@ library(readr)
 library(dplyr)
 ```
 
-## Resumen
-
-En este documento, se analiza un conjunto de datos compuesto por individuos diagnosticados con Mieloma Múltiple, con el propósito de evaluar cómo esta enfermedad puede influir en los niveles de hemoglobina. Utilizando datos recopilados, se examina la proporción de pacientes que presentan niveles de hemoglobina fuera del rango normal establecido. Los resultados indican que un significativo porcentaje de los pacientes con Mieloma Múltiple muestra alteraciones en sus niveles de hemoglobina. Específicamente, hemos observado que el 65.9% de las mujeres y el 80.5% de los hombres se encuentran fuera de los rangos normales de hemoglobina. Estos hallazgos sugieren que el Mieloma Múltiple tiene una notable incidencia en la alteración de los niveles de hemoglobina, con una tendencia predominante hacia valores por debajo de los niveles normales. Esta información es crucial para entender mejor el impacto de la enfermedad y para guiar futuros estudios y tratamientos.
-
-## Objetivos
-
-Queremos determinar si el Mieloma Múltiple afecta los niveles de hemoglobina en sangre. Para ello, a partir de un conjunto de datos de pacientes con esta enfermedad se estudiaran las proporciones de personas con niveles correctos y las personas con niveles alterados. Destacar que se realizará el estudio dividiendo los individuos por sexo, debido a que tienen niveles de hemoglobina distintos.
-
 ## Datos
-
-Cargamos los datos y observamos si se han cargado bien.
 
 ```{r, echo=FALSE}
  #### Cargar datos
@@ -35,6 +25,19 @@ Arkansas <- read_excel("Input/Arkansas.xlsx")
 head(Arkansas)
 
 ```
+
+Los datos han sido aportados por el profesor del TFG. Se trata de una base de datos formada por pacientes con Mieloma Múltiple.
+El estudio de estos ha sido realizado por Marc Arrom Esquembre.
+El enlace al repositorio es el siguiente: https://github.com/MarcArrom11/AD_Entrega1
+
+
+## Resumen
+
+En este documento, se analiza un conjunto de datos compuesto por individuos diagnosticados con Mieloma Múltiple, con el propósito de evaluar cómo esta enfermedad puede influir en los niveles de hemoglobina. Utilizando datos recopilados, se examina la proporción de pacientes que presentan niveles de hemoglobina fuera del rango normal establecido. Los resultados indican que un significativo porcentaje de los pacientes con Mieloma Múltiple muestra alteraciones en sus niveles de hemoglobina. Específicamente, hemos observado que el 65.9% de las mujeres y el 80.5% de los hombres se encuentran fuera de los rangos normales de hemoglobina. Estos hallazgos sugieren que el Mieloma Múltiple tiene una notable incidencia en la alteración de los niveles de hemoglobina, con una tendencia predominante hacia valores por debajo de los niveles normales. Esta información es crucial para entender mejor el impacto de la enfermedad y para guiar futuros estudios y tratamientos.
+
+## Objetivos
+
+Queremos determinar si el Mieloma Múltiple afecta los niveles de hemoglobina en sangre. Para ello, a partir de un conjunto de datos de pacientes con esta enfermedad se estudiaran las proporciones de personas con niveles correctos y las personas con niveles alterados. Destacar que se realizará el estudio dividiendo los individuos por sexo, debido a que tienen niveles de hemoglobina distintos.
 
 
 
