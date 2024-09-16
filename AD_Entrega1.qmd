@@ -1,41 +1,50 @@
 ---
-title: "Entrega 1"
-format: html
-editor: visual
+title: "Análisis del Impacto del Mieloma Múltiple en los Niveles de Hemoglobina"
+author:
+  - name: "Marc Arrom Esquembre"
+date: "`r Sys.Date()`"
+format: html 
 ---
 
-## 
 
-## Librerias
-
-```{r}
+```{r, echo=FALSE,include=FALSE}
 library(tidyverse) 
 library(ggplot2)
 library(survival) 
 library(readxl)
 library(readr)
+library(dplyr)
 ```
 
-## Carga de los datos
+## Resumen
+
+En este documento, se analiza un conjunto de datos compuesto por individuos diagnosticados con Mieloma Múltiple, con el propósito de evaluar cómo esta enfermedad puede influir en los niveles de hemoglobina. Utilizando datos recopilados, se examina la proporción de pacientes que presentan niveles de hemoglobina fuera del rango normal establecido. Los resultados indican que un significativo porcentaje de los pacientes con Mieloma Múltiple muestra alteraciones en sus niveles de hemoglobina. Específicamente, hemos observado que el 65.9% de las mujeres y el 80.5% de los hombres se encuentran fuera de los rangos normales de hemoglobina. Estos hallazgos sugieren que el Mieloma Múltiple tiene una notable incidencia en la alteración de los niveles de hemoglobina, con una tendencia predominante hacia valores por debajo de los niveles normales. Esta información es crucial para entender mejor el impacto de la enfermedad y para guiar futuros estudios y tratamientos.
+
+## Objetivos
+
+Queremos determinar si el Mieloma Múltiple afecta los niveles de hemoglobina en sangre. Para ello, a partir de un conjunto de datos de pacientes con esta enfermedad se estudiaran las proporciones de personas con niveles correctos y las personas con niveles alterados. Destacar que se realizará el estudio dividiendo los individuos por sexo, debido a que tienen niveles de hemoglobina distintos.
+
+## Datos
 
 Cargamos los datos y observamos si se han cargado bien.
 
-```{r, echo=FALSE,}
+```{r, echo=FALSE}
  #### Cargar datos
 Arkansas <- read_excel("Input/Arkansas.xlsx")
 
-print(Arkansas)
+head(Arkansas)
 
 ```
 
-Observamos que para algunas variables no se ha indentifado correctamente el tipo que son.
 
-```{r}
+
+```{r,echo=FALSE}
+#Observamos que para algunas variables no se ha indentifado correctamente el tipo que son.
 Arkansas$ASPC = as.numeric(Arkansas$ASPC)
 Arkansas$BMPC = as.numeric(Arkansas$BMPC)
 ```
 
-## Contexto y variables.
+## Contexto y variables de la base de datos   
 
 Este dataset está formado por 565 observaciones pertenecientes a pacientes con Mieloma Múltiple (un tipo de cancer que se origina en la médula ósea). Cada obersvación cuenta con 23 variables, hagamos un pequeño repaso de estas y para aquellas variables cínicas, analicemos cuáles deberían ser los valores para una persona sana. Los datos han sido extraidos del portal MayoClínic.
 
@@ -51,15 +60,15 @@ Este dataset está formado por 565 observaciones pertenecientes a pacientes con 
 
 -   ISOTYPE. El isotipo del paciente, "IgA", "IgG", "IgM" o "IgE".
 
--   B2M. Nos indica la Microglobulina beta-2, expresada en mg/l.La beta-2 microglobulina es una proteína que indica la función renal y el estado del sistema inmunológico. En el mieloma múltiple, sus niveles aumentan debido a la proliferación de células malignas y daño renal. Los niveles normales son inferiores a 2.5 mg/L (fuente: Mayo Clinic)
+-   B2M. Nos indica la Microglobulina beta-2, expresada en mg/l.La beta-2 microglobulina es una proteína que indica la función renal y el estado del sistema inmunológico. En el mieloma múltiple, sus niveles aumentan debido a la proliferación de células malignas y daño renal. Los niveles normales son inferiores a 2.5 mg/L.
 
 -   CRP. La Proteína C-Reactiva es un marcador de inflamación producido en el hígado, cuyo nivel en sangre aumenta en respuesta a la inflamación. En el mieloma múltiple, puede elevarse debido a la inflamación y a las infecciones recurrentes, ya que los pacientes tienen un sistema inmunológico comprometido.
 
--   CREAT. Nos indica la creatinina, expresada en mg/dl. Según MayoClínic, el rango normal para personas adulto s es entre 0,74 y 1,35m mg/dl para los hombres y entre 0,59 y 1,04 mg/dl.
+-   CREAT. Nos indica la creatinina, expresada en mg/dl. El rango normal para personas adulto s es entre 0,74 y 1,35m mg/dl para los hombres y entre 0,59 y 1,04 mg/dl.
 
--   LDH. Nos indica el Lactato Deshidrogenasa, expresado en U/l. La lactato deshidrogenasa es una enzima liberada en la sangre cuando hay daño celular. En el mieloma múltiple, sus niveles elevados indican mayor recambio celular y pueden reflejar una carga tumoral elevada o una enfermedad más agresiva. Los niveles normales en hombres de LDH se encuentran entre 122 a 222 U/L. (Mayo Clinic) <!--# https://www.mayoclinic.org/es/tests-procedures/liver-function-tests/about/pac-20394595#:~:text=La%20L%2Dlactato%20deshidrogenasa%20es,Tiempo%20de%20protrombina. -->
+-   LDH. Nos indica el Lactato Deshidrogenasa, expresado en U/l. La lactato deshidrogenasa es una enzima liberada en la sangre cuando hay daño celular. En el mieloma múltiple, sus niveles elevados indican mayor recambio celular y pueden reflejar una carga tumoral elevada o una enfermedad más agresiva. Los niveles normales en hombres de LDH se encuentran entre 122 a 222 U/L.
 
--   ALB. Nos indica la Albúmina, expresada en g/l. Nos indica la Albúmina, expresada en g/l. La albúmina es una proteína del hígado que regula el equilibrio de líquidos y transporta sustancias en el cuerpo. En el mieloma múltiple, sus niveles pueden reducirse por inflamación crónica, daño renal o mala nutrición. Los niveles normales de albúmina en adultos suelen estar entre 3.5 y 5.0 g/dL (Mayo Clinic).
+-   ALB. Nos indica la Albúmina, expresada en g/l. Nos indica la Albúmina, expresada en g/l. La albúmina es una proteína del hígado que regula el equilibrio de líquidos y transporta sustancias en el cuerpo. En el mieloma múltiple, sus niveles pueden reducirse por inflamación crónica, daño renal o mala nutrición. Los niveles normales de albúmina en adultos suelen estar entre 3.5 y 5.0 g/dL .
 
 -   HGB. Nos indica la Hemoglobina, expresada en g/dl. Nos indica la Hemoglobina, expresada en g/dl. La hemoglobina es una proteína en los glóbulos rojos que transporta oxígeno a los tejidos. En el mieloma múltiple, los pacientes suelen tener anemia debido a que las células cancerosas en la médula ósea desplazan a las que producen glóbulos rojos, lo que reduce su producción y causa síntomas como fatiga y debilidad. Los niveles normales de hemoglobina se encuentran entre 13,2 a 16,6 g/dL para los hombres y 11,6 a 15 g/dL para las mujeres.
 
@@ -83,11 +92,11 @@ Este dataset está formado por 565 observaciones pertenecientes a pacientes con 
 
 -   Cyto_Abn. Indica la presencia de anomalías citogenéticas. Se marca como "1" si se detectaron anomalías y "0" si no se detectaron o estaban ausentes.
 
-# Visualización y análisis de los datos
+## Visualización y análisis de los datos
 
 Ahora se mostrarán los datos hemoglobina separados por sexo en un gráfico. En este se muestra un rango, de color verde, que indica el intervalo en que los niveles de hemoglobia se consideran normales.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE}
 # Filtrar los datos para hombres y mujeres
 datos_filtrados <- Arkansas %>% 
   filter(SEX %in% c("male", "female")) %>%  # Filtrar solo para hombres y mujeres
@@ -140,8 +149,6 @@ ggplot(datos_filtrados, aes(x = Persona, y = HGB, color = SEX)) +
 Observamos que, en ambos sexos, hay una gran cantidad de individuos por debajo de los niveles normales. Aquí se muestra una tabla con los valors filtrados.
 
 ```{r, echo = FALSE}
-library(dplyr)
-
 # Definir el rango saludable específico para cada sexo
 rango_sano <- tibble(
   SEX = c("male", "female"),
@@ -195,4 +202,12 @@ suma_males <- resultado_final %>%
 
 ## Conclusiones
 
-Observando la proporción de personas que no se encuentran en los valores normales, tenemos que el 65.9% de las mujeres y el 80.5% de los hombres están fuera del rango normal. Esto nos podría indicar que los individuos con Mieloma Múltiple tienen tendencia a tener los niveles de homoglobina alterados, en su mayoria, por debajo de los normal.
+Observando la proporción de personas cuyos niveles de hemoglobina están fuera de los rangos normales, se evidencia que el 65.9% de las mujeres y el 80.5% de los hombres presentan niveles alterados. Este hallazgo sugiere que los individuos con Mieloma Múltiple tienen una tendencia significativa a presentar niveles de hemoglobina anormales, predominantemente por debajo de los valores normales. Estos resultados indican una posible asociación entre el Mieloma Múltiple y alteraciones en los niveles de hemoglobina, lo cual puede ser relevante para la evaluación y el manejo clínico de esta condición.
+
+## Bibliografia
+
+- Mayo Clinic. (2023). *Información sobre los rangos “Normales” de creatinina y su relación con la Albúmina*. Retrieved from [Mayo Clinic](https://www.mayoclinic.org/es/tests-procedures/creatinine-test/about/pac-20384646)
+
+- Mayo Clinic. (2024). *Información sobre los rangos Albúmina y Lactato deshidrogenasa EN HOMBRES*. Retrieved from [Mayo Clinic](https://www.mayoclinic.org/es/tests-procedures/liver-function-tests/about/pac-20394595#:~:text=La%20L%2Dlactato%20deshidrogenasa%20es,Tiempo%20de%20protrombina.)
+
+- Mayo Clinic. (2022). *Información sobre rangos Normales de hemoglobina*. Retrieved from [Mayo Clinic](https://www.mayoclinic.org/es/tests-procedures/hemoglobin-test/about/pac-20385075)
